@@ -1,0 +1,15 @@
+Scenario Title: FTP Misconfiguration
+Description: You have discovered an FTP server with a misconfiguration that allows unauthorized access to sensitive files. This scenario is designed for beginners to practice identifying and exploiting common misconfigurations.
+
+Scenario Steps:
+1. FTP Enumeration
+2. FTP Service Scanning
+3. File Enumeration
+4. Misconfiguration Discovery
+5. Exploitation
+6. Capture the Flag (Optional)
+
+Notes:
+- Ensure participants have appropriate permissions to perform these actions ethically.
+- The scenario is meant for educational purposes.
+

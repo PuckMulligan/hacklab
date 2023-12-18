@@ -1,0 +1,6 @@
+Congratulations! You have successfully exploited the misconfigured FTP server and retrieved the flag.
+
+Flag: FTP_Misconfig_Flag123
+
+Well done on completing this scenario!
+
