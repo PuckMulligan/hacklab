@@ -2,12 +2,21 @@
 
 # Function to list available scenarios
 list_scenarios() {
+    local scenario_list=()
+    local scenario_num=0
+
     echo "Available scenarios:"
     for scenario_dir in scenarios/*; do
         if [ -d "$scenario_dir" ]; then
-            echo "$(basename $scenario_dir)"
+            scenario_num=$((scenario_num + 1))
+            scenario_name=$(basename "$scenario_dir")
+            scenario_list+=("$scenario_name")
+            echo "$scenario_num. $scenario_name"
         fi
     done
+
+    # Return the list of scenario names as a space-separated string
+    echo "${scenario_list[@]}"
 }
 
 # Function to run a selected scenario
@@ -17,9 +26,16 @@ run_scenario() {
 
     if [ -d "$scenario_dir" ]; then
         echo "Running scenario: $selected_scenario"
+        cd "$scenario_dir" || return  # Change to the scenario directory
+
         # Add code to execute the scenario here
-        # For example, you can start the FTP server container
-        docker run -d -p 2121:21 --name ftp_server stilliard/pure-ftpd
+        # For example, start Docker containers or execute scripts
+        ./start_scenario.sh  # Assuming a script to start the scenario
+
+        # Provide instructions or information for participants
+        cat instructions.txt  # Display scenario instructions (if available)
+
+        cd -  # Return to the previous working directory
     else
         echo "Scenario not found: $selected_scenario"
     fi
@@ -39,8 +55,16 @@ while true; do
             list_scenarios
             ;;
         2)
-            read -p "Enter the name of the scenario to run: " selected_scenario
-            run_scenario "$selected_scenario"
+            scenario_list=($(list_scenarios))
+            read -p "Enter the name or number of the scenario to run: " selected_scenario
+
+            # Check if the selected_scenario is a number
+            if [[ "$selected_scenario" =~ ^[0-9]+$ ]]; then
+                # User entered a number, so retrieve the corresponding scenario name
+                selected_scenario="${scenario_list[$selected_scenario - 1]}"
+            fi
+
+            run_scenario "$selected_scenario"  # Pass the selected scenario as an argument
             ;;
         3)
             echo "Exiting Scenario Manager"
